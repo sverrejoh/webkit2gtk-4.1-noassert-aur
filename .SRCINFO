@@ -1,5 +1,5 @@
 pkgbase = webkit2gtk-4.1
-	pkgdesc = Web content engine for GTK
+	pkgdesc = Web content engine for GTK (built without debug assertions)
 	pkgver = 2.48.3
 	pkgrel = 1
 	url = https://webkitgtk.org
@@ -101,14 +101,10 @@ pkgbase = webkit2gtk-4.1
 	b2sums = d07afd02ca3159e2a8998167818614eb586754f6485ea5b998a10686df44a16c99c5890b6fc7ccb3c1aa4aef82f1626be39cd67a4e60dbbe9eda466fd17aa002
 	b2sums = SKIP
 
-pkgname = webkit2gtk-4.1
+pkgname = webkit2gtk-4.1-noassert
 	optdepends = geoclue: Geolocation support
 	optdepends = gst-libav: nonfree media decoding
 	optdepends = gst-plugins-bad: media decoding
 	optdepends = gst-plugins-good: media decoding
 	provides = libjavascriptcoregtk-4.1.so
 	provides = libwebkit2gtk-4.1.so
-
-pkgname = webkit2gtk-4.1-docs
-	pkgdesc = Web content engine for GTK (documentation)
-	depends = 

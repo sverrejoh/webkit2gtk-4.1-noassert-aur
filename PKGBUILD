@@ -1,14 +1,15 @@
 # Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 # Contributor: Eric Bélanger <eric@archlinux.org>
+# Modified for noassert build by: Sverre Johansen <sverre.johansen@gmail.com>
+
+# This is a fork that builds webkit2gtk with -DNDEBUG to disable assertions
+# Installs to /opt/webkit2gtk-noassert to avoid conflicts with system package
 
 pkgbase=webkit2gtk-4.1
-pkgname=(
-  webkit2gtk-4.1
-  webkit2gtk-4.1-docs
-)
+pkgname=webkit2gtk-4.1-noassert
 pkgver=2.48.3
 pkgrel=1
-pkgdesc="Web content engine for GTK"
+pkgdesc="Web content engine for GTK (built without debug assertions)"
 url="https://webkitgtk.org"
 arch=(x86_64)
 license=(
@@ -128,10 +129,10 @@ build() {
     -D CMAKE_BUILD_TYPE=Release
     -D CMAKE_INSTALL_LIBDIR=lib
     -D CMAKE_INSTALL_LIBEXECDIR=lib
-    -D CMAKE_INSTALL_PREFIX=/usr
+    -D CMAKE_INSTALL_PREFIX=/opt/webkit2gtk-noassert
     -D CMAKE_SKIP_RPATH=ON
-    -D ENABLE_DOCUMENTATION=ON
-    -D ENABLE_MINIBROWSER=ON
+    -D ENABLE_DOCUMENTATION=OFF
+    -D ENABLE_MINIBROWSER=OFF
     -D ENABLE_SPEECH_SYNTHESIS=OFF
     -D PORT=GTK
     -D USE_FLITE=OFF
@@ -153,12 +154,16 @@ build() {
   CFLAGS+=' -fcf-protection=none'
   CXXFLAGS+=' -fcf-protection=none'
 
+  # Add -DNDEBUG to disable assertions
+  CFLAGS+=' -DNDEBUG'
+  CXXFLAGS+=' -DNDEBUG'
+
   cmake -S webkitgtk-$pkgver -B build -G Ninja "${cmake_options[@]}"
   cmake --build build
 }
 
-package_webkit2gtk-4.1() {
-  provides+=(
+package() {
+  provides=(
     libjavascriptcoregtk-4.1.so
     libwebkit2gtk-4.1.so
   )
@@ -171,11 +176,6 @@ package_webkit2gtk-4.1() {
 
   DESTDIR="$pkgdir" cmake --install build
 
-  rm -r "$pkgdir/usr/bin"
-
-  mkdir -p doc/usr/share
-  mv {"$pkgdir",doc}/usr/share/doc
-
   cd webkitgtk-$pkgver
   find Source -name 'COPYING*' -or -name 'LICENSE*' -print0 | sort -z |
     while IFS= read -d $'\0' -r _f; do
@@ -184,13 +184,6 @@ package_webkit2gtk-4.1() {
       echo
     done |
     install -Dm644 /dev/stdin "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-}
-
-package_webkit2gtk-4.1-docs() {
-  pkgdesc+=" (documentation)"
-  depends=()
-
-  mv doc/* "$pkgdir"
 }
 
 # vim:set sw=2 sts=-1 et:
