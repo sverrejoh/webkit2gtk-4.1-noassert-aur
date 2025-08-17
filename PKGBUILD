@@ -4,6 +4,10 @@
 
 # This is a fork that builds webkit2gtk with -DNDEBUG to disable assertions
 # Installs to /opt/webkit2gtk-noassert to avoid conflicts with system package
+#
+# IMPORTANT: Before building, import the WebKitGTK maintainer PGP keys:
+# gpg --recv-keys 5AA3BC334FD7E3369E7C77B291C559DBE4C9123B 013A0127AC9C65B34FFA62526C1009B693975393
+# These keys can be verified at: https://www.webkitgtk.org/verifying.html
 
 pkgbase=webkit2gtk-4.1
 pkgname=webkit2gtk-4.1-noassert
